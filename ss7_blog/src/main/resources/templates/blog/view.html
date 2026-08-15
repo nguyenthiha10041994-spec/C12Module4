@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi tiết Blog</title>
+</head>
+<body>
+
+<h1>Chi tiết Blog</h1>
+
+<p>
+    <strong>ID:</strong>
+    <span th:text="${blog.id}"></span>
+</p>
+
+<p>
+    <strong>Tiêu đề:</strong>
+    <span th:text="${blog.title}"></span>
+</p>
+
+<p>
+    <strong>Nội dung:</strong>
+    <span th:text="${blog.content}"></span>
+</p>
+
+<a th:href="@{/blogs}">Quay lại danh sách</a>
+
+</body>
+</html>

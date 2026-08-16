@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách Blog</title>
+</head>
+<body>
+<h1>Danh sách Blog</h1>
+<a th:href="@{/blogs/create}">Thêm Blog</a>
+<br><br>
+<form th:action="@{/blogs}" method="get">
+    <label>Sắp xếp: </label>
+    <select name="sort" onchange="this.form.submit()">
+        <option value="desc"
+                th:selected="${sort == 'desc'}">
+            Mới nhất
+        </option>
+
+        <option value="asc"
+                th:selected="${sort == 'asc'}">
+            Cũ nhất
+        </option>
+    </select>
+</form>
+<br>
+<form th:action="@{/blogs}" method="get">
+    <input type="text"
+           name="keyword"
+           th:value="${keyword}"
+           placeholder="Nhập tiêu đề cần tìm">
+    <input type="hidden"
+           name="sort"
+           th:value="${sort}">
+
+    <button type="submit">
+        Tìm kiếm
+    </button>
+</form>
+<br>
+<h3>Danh mục</h3>
+
+<a th:href="@{/blogs}">
+    Tất cả
+</a>
+<span th:each="category : ${categories}">
+    <a th:href="@{/blogs/category/{id}(id=${category.id})}"
+       th:text="${category.name}">
+    </a>
+</span>
+<br><br>
+<table border="1" cellpadding="8">
+
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Tiêu đề</th>
+        <th>Nội dung</th>
+        <th>Category</th>
+        <th>Ngày tạo</th>
+        <th>Hành động</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="blog : ${blogs}">
+        <td th:text="${blog.id}"></td>
+        <td th:text="${blog.title}"></td>
+        <td th:text="${blog.content}"></td>
+        <td th:text="${blog.category != null ? blog.category.name : 'Chưa có'}"></td>
+        <td th:text="${blog.createdAt}"></td>
+        <td>
+            <a th:href="@{/blogs/{id}(id=${blog.id})}">
+                Chi tiết
+            </a>
+            <a th:href="@{/blogs/edit/{id}(id=${blog.id})}">
+                Sửa
+            </a>
+            <a th:href="@{/blogs/delete/{id}(id=${blog.id})}"
+               onclick="return confirm('Bạn có chắc muốn xóa không?')">
+                Xóa
+            </a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<div>
+    <span th:if="${currentPage > 0}">
+        <a th:href="@{/blogs(
+            page=${currentPage - 1},
+            sort=${sort},
+            keyword=${keyword}
+        )}">
+            Trước
+        </a>
+    </span>
+    &nbsp;
+    <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+
+        <a th:href="@{/blogs(
+            page=${i},
+            sort=${sort},
+            keyword=${keyword}
+        )}"
+           th:text="${i + 1}">
+        </a>
+        &nbsp;
+    </span>
+    <span th:if="${currentPage < totalPages - 1}">
+        <a th:href="@{/blogs(
+            page=${currentPage + 1},
+            sort=${sort},
+            keyword=${keyword}
+        )}">
+            Sau »
+        </a>
+    </span>
+</div>
+</body>
+</html>
